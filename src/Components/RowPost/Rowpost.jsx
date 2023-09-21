@@ -6,6 +6,7 @@ import Youtube from 'react-youtube';
 import {API_KEY, imageUrl} from "../../constants/constants"
 import './RowPost.css'
 function RowPost(props) {
+    const[pop,setPop] = useState(false);
     const[movies,setMovies] = useState([]);
     const[urlId,setUrlId] =useState('');
     useEffect(()=>{
@@ -22,7 +23,7 @@ function RowPost(props) {
     width: '100%',
     playerVars: {
     
-      autoplay: 0,
+      autoplay: 1,
     },
   };
 
@@ -32,11 +33,16 @@ function RowPost(props) {
         console.log(response.data);
         if(response.data.results.length!==0){
             setUrlId(response.data.results[0])
+             setPop(true);
         }else{
             console.log('Array empty');
         }
     }
     )}
+
+    const closeVideo=()=>{
+        setPop(false)
+        }
     return (
         
         
@@ -53,7 +59,17 @@ function RowPost(props) {
                 
               
             </div>
-           { urlId && <Youtube opts={opts}  videoId={urlId.key}/>}
+            { pop  && 
+            
+            <div className="video-popup">
+                <button className="close-button" onClick={closeVideo}> X</button>
+                <div className="video-content">
+
+                    < Youtube videoId={urlId.key} opts={opts} />
+                <h2 className='video-title'>{urlId.name}</h2>
+     
+            </div>
+          </div>}
         </div>
     )
 }
